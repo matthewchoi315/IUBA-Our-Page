@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Our Page | Campus Growth Journey</title>
+    
+    <!-- iOS Web App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Our Page">
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F8FAFC;
+            -webkit-tap-highlight-color: transparent;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            overscroll-behavior: none;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #ffffff; }
+        ::-webkit-scrollbar-thumb { background: #f1f5f9; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #e2e8f0; }
+        
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        
+        @media (min-width: 640px) {
+          /* .sm\:grid-cols-15 { grid-template-columns: repeat(15, minmax(0, 1fr)); } */
+        }
+        .grid-cols-15 { grid-template-columns: repeat(15, minmax(0, 1fr)); }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex flex-col text-[#1E293B]">
+
+    <!-- Level Up Overlay -->
+    <div id="levelUpOverlay" class="hidden fixed inset-0 z-[100] bg-indigo-600/95 backdrop-blur-2xl flex flex-col items-center justify-center text-white text-center px-4">
+        <i data-lucide="trophy" class="w-24 h-24 mb-6 animate-bounce text-yellow-300"></i>
+        <h2 class="text-6xl font-black tracking-tighter mb-2 uppercase">Stage Cleared!</h2>
+        <p class="text-2xl font-bold opacity-90 uppercase tracking-[0.2em]">Next Evolution Starting</p>
+    </div>
+
+    <!-- Header -->
+    <header class="h-14 bg-white z-50 px-8 flex items-center justify-between border-b border-slate-100 flex-shrink-0 shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-md">
+                <i data-lucide="layout" class="w-4 h-4 text-white"></i>
+            </div>
+            <h1 class="text-lg font-black tracking-tighter leading-none uppercase">
+                OUR <span class="text-indigo-600">PAGE</span>
+            </h1>
+        </div>
+        <div class="bg-indigo-600 px-4 py-1.5 rounded-full text-white flex items-center gap-2 shadow-lg">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span id="headerStageLabel" class="text-xs font-black uppercase tracking-widest">Stage 1</span>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-hidden p-4 lg:p-6 animate-fade-in">
+        <div class="max-w-7xl mx-auto h-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            
+            <!-- LEFT: Growth Focus -->
+            <div class="lg:col-span-4 flex flex-col gap-5 min-h-0">
+                <!-- Stage Image -->
+                <div class="relative h-[60%] rounded-2xl overflow-hidden shadow-lg bg-white border border-slate-100 flex-shrink-0 group">
+                    <img id="stageImage" src="" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Stage Image">
+                    
+                    <!-- TOP: Teaching -->
+                    <div class="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-black/80 via-black/40 to-transparent p-5">
+                        <p id="motherTeaching" class="text-white text-center text-[13px] font-black italic leading-snug drop-shadow-xl opacity-100 px-2 line-clamp-3">
+                            <!-- Teaching text will be injected here -->
+                        </p>
+                    </div>
+
+                    <!-- BOTTOM: Title -->
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6">
+                        <h2 id="stageTitle" class="text-3xl font-black text-white tracking-tighter leading-none mb-2"></h2>
+                        <p id="stageDescription" class="text-white/80 text-[11px] font-bold leading-relaxed line-clamp-2 max-w-[90%]"></p>
+                    </div>
+                </div>
+
+                <!-- Growth Status -->
+                <div class="h-[40%] bg-white rounded-2xl p-5 border border-slate-100 shadow-md flex flex-col flex-shrink-0">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Growth Analytics</h3>
+                        <div id="totalProgressPercent" class="text-3xl font-black text-indigo-600 tracking-tighter leading-none">0%</div>
+                    </div>
+                    
+                    <div id="categoryStatsContainer" class="flex-1 grid grid-cols-2 gap-4 min-h-0">
+                        <!-- Category Stats will be injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Mission Dashboard -->
+            <div class="lg:col-span-8 flex flex-col gap-2 min-h-0">
+                <!-- Header & Global Progress -->
+                <div class="flex flex-col gap-2 flex-shrink-0 px-2">
+                    <div class="flex items-end justify-between">
+                        <div class="flex flex-col">
+                            <h2 class="text-2xl font-black tracking-tighter text-slate-900 leading-none">Mission Dashboard</h2>
+                            <span id="dashboardStageLabel" class="text-[10px] font-black text-indigo-400 uppercase mt-2 tracking-[0.15em]">Stage 1 Progress</span>
+                        </div>
+                        <div class="text-right leading-none">
+                            <span id="checkedCountDisplay" class="text-3xl font-black text-slate-900 tracking-tighter">0</span>
+                            <span class="text-slate-300 text-xl mx-2 font-light">/</span>
+                            <span class="text-xl font-black text-slate-300">120</span>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-2.5 bg-slate-100 rounded-full overflow-hidden shadow-inner border border-slate-50">
+                        <div id="totalProgressBar" class="absolute inset-y-0 left-0 bg-indigo-600 rounded-full transition-all duration-1000 ease-out shadow-md" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Mission Grids -->
+                <div id="missionGridsContainer" class="flex-1 flex flex-col gap-2 min-h-0 overflow-hidden overflow-y-auto pr-1">
+                    <!-- Mission Grids will be injected here -->
+                </div>
+
+                <!-- Utilities -->
+                <div class="flex items-center justify-between px-3 py-1 flex-shrink-0 mt-1">
+                    <div class="text-[10px] font-black text-slate-300 uppercase tracking-widest italic flex items-center gap-2">
+                        <div class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
+                        Local Cloud Save Active
+                    </div>
+                    <button id="resetButton" class="text-[10px] font-black text-slate-400 uppercase hover:text-rose-500 transition-colors tracking-widest underline underline-offset-4">
+                        Reset Progress
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- Constants ---
+        const TOTAL_ITEMS = 120;
+        const ITEMS_PER_SECTION = 30;
+        const MissionCategory = {
+            PRAYER: 'Prayer',
+            BIBLE_READING: 'Bible Reading',
+            TRUTH_BOOK: 'Reading Truth Book',
+            SERMON: 'Watching Sermon'
+        };
+        
+        const MOTHER_TEACHINGS = [
+            "As God always gives love, giving love is more blessed than receiving love.",
+            "When we give glory to God, that glory will be ours in the end.",
+            "When we look at things beautifully without hatred in our hearts, we can achieve perfect love.",
+            "As Abraham received more blessings when he yielded for his nephew Lot, we, too, will receive more blessings when we yield for our brothers and sisters.",
+            "Arrogance is feeling disappointed when our expectations are not met.",
+            "Although others do not work, let us work faithfully without complaining. When we work with the mindset of an owner, we can work with joy and ease.",
+            "Arrogance arises from a heart full of complaint. When we always serve God with gratitude, arrogance and complaint disappear, and humility will dwell in our hearts.",
+            "When we compliment our brothers and sisters, compliments will return to us.",
+            "As the sea receives all the dirt and purifies it, we should have a broad and beautiful heart to embrace the faults of our brothers and sisters.",
+            "Whoever wants to be led by the Lamb should become a lamb smaller than the Lamb.",
+            "Sacrifice is needed in the process of becoming a greater vessel.",
+            "Even God came to serve, not to be served. When we serve one another without wanting to be served, God will be pleased.",
+            "We should endure present sufferings for the Kingdom of Heaven will be ours."
+        ];
+
+        const STAGES = [
+            { level: 1, title: "The Sprout", description: "A tiny sprout in the campus garden being watered, symbolizing the start of growth.", localImagePath: "/images/stage1.png" },
+            { level: 2, title: "First Bloom", description: "The sprout begins to bloom, soaking in the warm university sunlight.", localImagePath: "/images/stage2.png" },
+            { level: 3, title: "Young Sapling", description: "A small, sturdy young tree standing tall in the center of the campus park.", localImagePath: "/images/stage3.png" },
+            { level: 4, title: "Extending Branches", description: "Branches are growing and fresh leaves are sprouting as the tree gains strength.", localImagePath: "/images/stage4.png" },
+            { level: 5, title: "Lush Greenery", description: "The small tree is now covered in thick, vibrant green leaves.", localImagePath: "/images/stage5.png" },
+            { level: 6, title: "Deepening Roots", description: "The tree is immersed in the Word, personified reading the Bible on campus.", localImagePath: "/images/stage6.png" },
+            { level: 7, title: "Pillar of Prayer", description: "The tree character is seen praying deeply under the starlit campus sky.", localImagePath: "/images/stage7.png" },
+            { level: 8, title: "Sharing the Light", description: "The tree character shares the Good News with students on campus.", localImagePath: "/images/stage8.png" },
+            { level: 9, title: "Abundant Fruit", description: "The tree is now heavy with many ripe fruits, showing a life of maturity.", localImagePath: "/images/stage9.png" },
+            { level: 10, title: "New Beginnings", description: "New sprouts begin to emerge around the base of the great tree.", localImagePath: "/images/stage10.png" },
+            { level: 11, title: "Growing Community", description: "The surrounding sprouts have grown into young saplings, creating a small grove.", localImagePath: "/images/stage11.png" },
+            { level: 12, title: "The Harvest", description: "The entire grove is now bearing fruit, a complete and beautiful spiritual harvest.", localImagePath: "/images/stage12.png" }
+        ];
+
+        // --- State Management ---
+        let state = {
+            items: [],
+            currentStageIndex: 0
+        };
+
+        // Initialize State
+        function initState() {
+            const savedItems = localStorage.getItem('faith_journey_items');
+            if (savedItems) {
+                state.items = JSON.parse(savedItems);
+            } else {
+                const initialItems = [];
+                const categories = [
+                    MissionCategory.PRAYER,
+                    MissionCategory.BIBLE_READING,
+                    MissionCategory.TRUTH_BOOK,
+                    MissionCategory.SERMON
+                ];
+                categories.forEach((cat, catIdx) => {
+                    for (let i = 1; i <= ITEMS_PER_SECTION; i++) {
+                        initialItems.push({
+                            id: catIdx * ITEMS_PER_SECTION + i,
+                            label: `${cat} ${i}`,
+                            category: cat,
+                            checked: false
+                        });
+                    }
+                });
+                state.items = initialItems;
+            }
+
+            const savedStage = localStorage.getItem('faith_journey_stage');
+            state.currentStageIndex = savedStage ? parseInt(savedStage, 10) : 0;
+        }
+
+        function saveState() {
+            localStorage.setItem('faith_journey_items', JSON.stringify(state.items));
+            localStorage.setItem('faith_journey_stage', state.currentStageIndex.toString());
+        }
+
+        // --- Logic & Rendering ---
+
+        function getCategoryIconName(cat) {
+            switch (cat) {
+                case MissionCategory.PRAYER: return 'flame';
+                case MissionCategory.BIBLE_READING: return 'book-open';
+                case MissionCategory.TRUTH_BOOK: return 'heart';
+                case MissionCategory.SERMON: return 'tv';
+                default: return 'circle';
+            }
+        }
+        
+        function getCategoryColorClass(cat) {
+             switch (cat) {
+                case MissionCategory.PRAYER: return 'text-orange-400';
+                case MissionCategory.BIBLE_READING: return 'text-blue-400';
+                case MissionCategory.TRUTH_BOOK: return 'text-pink-400';
+                case MissionCategory.SERMON: return 'text-purple-400';
+                default: return 'text-slate-400';
+            }
+        }
+
+        function toggleItem(id) {
+            const item = state.items.find(i => i.id === id);
+            if (item) {
+                item.checked = !item.checked;
+                saveState();
+                render();
+                checkLevelUp();
+            }
+        }
+
+        function checkLevelUp() {
+            const checkedCount = state.items.filter(i => i.checked).length;
+            if (checkedCount === TOTAL_ITEMS && state.currentStageIndex < STAGES.length - 1) {
+                setTimeout(() => {
+                    // Show Level Up Overlay
+                    const overlay = document.getElementById('levelUpOverlay');
+                    overlay.classList.remove('hidden');
+                    overlay.classList.add('animate-in', 'fade-in', 'zoom-in');
+
+                    // Update State
+                    state.currentStageIndex++;
+                    state.items.forEach(item => item.checked = false);
+                    saveState();
+                    render();
+
+                    // Hide Overlay after 3s
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                    }, 3000);
+                }, 500);
+            }
+        }
+
+        function resetProgress() {
+            if (confirm("모든 데이터를 초기화하시겠습니까?")) {
+                state.items.forEach(i => i.checked = false);
+                state.currentStageIndex = 0; // Optional: Reset stage too? Usually reset progress means items. But let's keep stage if user wants to keep growth. Actually code said "items checked false", so stage might be kept or reset. The original code only reset items. Let's stick to original behavior: setItems(prev => prev.map(i => ({...i, checked: false})))
+                // Wait, if we reset items, checkedCount becomes 0.
+                saveState();
+                render();
+            }
+        }
+
+        function render() {
+            const checkedCount = state.items.filter(i => i.checked).length;
+            const progressPercent = Math.round((checkedCount / TOTAL_ITEMS) * 100);
+            const stage = STAGES[state.currentStageIndex];
+
+            // 1. Header
+            document.getElementById('headerStageLabel').textContent = `Stage ${state.currentStageIndex + 1}`;
+
+            // 2. Stage Image & Text
+            const imgEl = document.getElementById('stageImage');
+            // Only update src if changed to prevent flickering
+            const newSrc = stage.localImagePath;
+            if (!imgEl.src.endsWith(newSrc)) {
+                imgEl.src = newSrc;
+            }
+            imgEl.onerror = function() {
+                this.src = '/placeholder.svg';
+                this.onerror = null;
+            };
+
+            document.getElementById('motherTeaching').textContent = `"${MOTHER_TEACHINGS[state.currentStageIndex % MOTHER_TEACHINGS.length]}"`;
+            document.getElementById('stageTitle').textContent = stage.title;
+            document.getElementById('stageDescription').textContent = stage.description;
+
+            // 3. Growth Analytics (Left)
+            document.getElementById('totalProgressPercent').textContent = `${progressPercent}%`;
+            
+            const categories = Object.values(MissionCategory);
+            const statsContainer = document.getElementById('categoryStatsContainer');
+            statsContainer.innerHTML = '';
+
+            categories.forEach(cat => {
+                const catItems = state.items.filter(i => i.category === cat);
+                const done = catItems.filter(i => i.checked).length;
+                const percent = Math.round((done / catItems.length) * 100);
+                
+                const statEl = document.createElement('div');
+                statEl.className = "bg-slate-50/80 p-3.5 rounded-2xl flex flex-col justify-center border border-slate-100";
+                statEl.innerHTML = `
+                    <div class="text-[9px] font-black text-slate-400 uppercase mb-1.5 tracking-tight">${cat.split(' ')[0]}</div>
+                    <div class="flex items-baseline gap-1.5">
+                        <span class="text-3xl font-black text-slate-800 leading-none tracking-tighter">${percent}</span>
+                        <span class="text-xs font-black text-slate-400">%</span>
+                    </div>
+                    <div class="mt-3 w-full h-1.5 bg-slate-200/50 rounded-full overflow-hidden">
+                        <div class="h-full bg-indigo-500 transition-all duration-1000 ease-out" style="width: ${percent}%"></div>
+                    </div>
+                `;
+                statsContainer.appendChild(statEl);
+            });
+
+            // 4. Mission Dashboard (Right)
+            document.getElementById('dashboardStageLabel').textContent = `Stage ${state.currentStageIndex + 1} Progress`;
+            document.getElementById('checkedCountDisplay').textContent = checkedCount;
+            document.getElementById('totalProgressBar').style.width = `${progressPercent}%`;
+
+            const gridsContainer = document.getElementById('missionGridsContainer');
+            gridsContainer.innerHTML = '';
+
+            categories.forEach(cat => {
+                const catItems = state.items.filter(i => i.category === cat);
+                const done = catItems.filter(i => i.checked).length;
+                const iconName = getCategoryIconName(cat);
+                const iconColorClass = getCategoryColorClass(cat);
+
+                const cardEl = document.createElement('div');
+                // Reduced padding (px-5 py-3 -> px-3 py-2) and rounded corners slightly
+                cardEl.className = "flex-1 bg-white rounded-xl px-3 py-2 border border-slate-50 shadow-sm flex flex-col justify-center transition-all hover:shadow-md";
+                
+                // Header: Reduced margin (mb-2 -> mb-1)
+                const headerHtml = `
+                    <div class="flex items-center justify-between mb-1">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 bg-indigo-50/50 rounded-lg flex items-center justify-center shadow-inner">
+                                <i data-lucide="${iconName}" class="w-3 h-3 ${iconColorClass}"></i>
+                            </div>
+                            <h3 class="text-[10px] font-black text-slate-700 uppercase tracking-wide">${cat}</h3>
+                        </div>
+                        <div class="text-[10px] font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full tracking-tighter shadow-sm">${done} / 30</div>
+                    </div>
+                `;
+
+                // Grid: Reduced gap (gap-1.5 -> gap-1)
+                const gridEl = document.createElement('div');
+                // Force 15 columns always to keep it to 2 rows (30 items / 15 = 2 rows)
+                gridEl.className = "grid grid-cols-15 gap-1";
+                
+                catItems.forEach((item, idx) => {
+                    const btn = document.createElement('button');
+                    const isChecked = item.checked;
+                    // Removed aspect-square, added fixed height (h-5) to prevent vertical expansion on wide screens
+                    btn.className = `h-5 w-full rounded text-[9px] font-black transition-all flex items-center justify-center ${isChecked ? 'bg-indigo-600 text-white shadow-md ring-1 ring-indigo-200' : 'bg-slate-50 text-slate-500 hover:bg-white hover:border-indigo-200 border border-transparent shadow-sm'}`;
+                    
+                    if (isChecked) {
+                        btn.innerHTML = `<i data-lucide="check-circle-2" class="w-3 h-3"></i>`;
+                    } else {
+                        btn.textContent = idx + 1;
+                    }
+
+                    btn.onclick = () => toggleItem(item.id);
+                    gridEl.appendChild(btn);
+                });
+
+                cardEl.innerHTML = headerHtml;
+                cardEl.appendChild(gridEl);
+                gridsContainer.appendChild(cardEl);
+            });
+
+            // Re-initialize icons for newly added elements
+            lucide.createIcons();
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initState();
+            render();
+            
+            document.getElementById('resetButton').onclick = resetProgress;
+        });
+
+    </script>
+</body>
+</html>
